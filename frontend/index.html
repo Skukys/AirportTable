@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>FlightTable</title>
+</head>
+<body>
+<div id="app">
+    <div class="control flex">
+        <button class="create" @click="createFlight = true">Добавить</button>
+    </div>
+    <div class="main flex">
+        <h1 class="main__title"><span v-if="lang === 'ru'">Вылету</span><span v-else>Flights</span></h1>
+        <div class="main__content flex">
+            <div class="table flex">
+                <div class="table__head flex">
+                    <p class="t1"><span v-if="lang === 'ru'">Рейс</span><span v-else>Flight</span></p>
+                    <p class="t2"><span v-if="lang === 'ru'">Маршрут</span><span v-else>Route</span></p>
+                    <p class="t3"><span v-if="lang === 'ru'">Время</span><span v-else>Time</span></p>
+                    <p class="t4"><span v-if="lang === 'ru'">Выход</span><span v-else>Gate</span></p>
+                    <p class="t5"><span v-if="lang === 'ru'">Статус</span><span v-else>Status</span></p>
+                </div>
+                <div class="table__block flex">
+                    <div v-for="(obj, name) in flights" style="width: 100%;">
+                        <div class="table__date">{{name}}</div>
+                        <div class="table__flight flex" v-for="flight in obj" @click="getFlight(flight.id)">
+                            <p class="t1">{{flight.flight}}</p>
+                            <p class="t2">{{flight.route}}</p>
+                            <p class="t3">{{flight.departure_time}} <span class="orange">{{flight.delay}}</span></p>
+                            <p class="t4">{{flight.gate}}</p>
+                            <p class="t5"><span
+                                    :class="flight.status.color"><span v-if="lang==='ru'">{{flight.status.ru}}</span> <span v-else>{{flight.status.en}}</span> {{flight.delay}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-info flex"><div>{{date}}</div><div>{{time}}</div></div>
+
+    </div>
+    <div class="change-block flex" v-if="change">
+        <div class="change__content flex">
+            <a @click="close">Close</a>
+            <label>Gate: <input type="text" v-model="changeGate"></label>
+            <label>Status: <select name="status" id="status" v-model="changeStatus">
+                <option value="on-time">On Time</option>
+                <option value="check-in">Check In</option>
+                <option value="gate">Gate</option>
+                <option value="delayed-until">Delayed Until</option>
+                <option value="boarding">Boarding</option>
+            </select></label>
+            <label>Delay: <input type="text" v-model="changeDelay"></label>
+            <button @click="changeFlight">Изменить</button>
+        </div>
+    </div>
+    <div class="change-block flex" v-if="createFlight">
+        <div class="change__content flex">
+            <a @click="close">Close</a>
+            <label>Flight: <input type="text" v-model="createData.flight"></label>
+            <label>Route: <input type="text" v-model="createData.route"></label>
+            <label>Date: <input type="date" v-model="createData.departure_date"></label>
+            <label>Time: <input type="text" v-model="createData.departure_time"></label>
+            <button @click="newFlight">Создать</button>
+        </div>
+    </div>
+</div>
+<script src="assets/js/vue.min.js"></script>
+<script src="assets/js/index.js" type="module"></script>
+</body>
+</html>
